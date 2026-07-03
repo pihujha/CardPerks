@@ -1,17 +1,18 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { json } from '../_helpers';
 import { verifyToken, getTokenFromRequest } from '../_auth-utils';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export const config = { runtime: 'edge' };
+
+export default async function handler(req: Request): Promise<Response> {
   try {
     const token = getTokenFromRequest(req);
-    if (!token) return res.status(200).json({ user: null });
+    if (!token) return json({ user: null });
 
     const payload = await verifyToken(token);
-    if (!payload) return res.status(200).json({ user: null });
+    if (!payload) return json({ user: null });
 
-    return res.status(200).json({ user: { id: payload.sub, name: payload.name, email: payload.email } });
-  } catch (err) {
-    console.error('[me]', err);
-    return res.status(200).json({ user: null });
+    return json({ user: { id: payload.sub, name: payload.name, email: payload.email } });
+  } catch {
+    return json({ user: null });
   }
 }

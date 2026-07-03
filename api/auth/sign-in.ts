@@ -1,28 +1,27 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getDb } from '../_helpers';
+import { getDb, json } from '../_helpers';
 import { verifyPassword, createToken, authCookieHeader } from '../_auth-utils';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+export const config = { runtime: 'edge' };
+
+export default async function handler(req: Request): Promise<Response> {
+  if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
   try {
-    const body = req.body as { email?: string; password?: string } | undefined;
-    const { email, password } = body ?? {};
+    const body  = await req.json() as { email?: string; password?: string };
+    const { email, password } = body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required.' });
-    }
+    if (!email || !password) return json({ error: 'Email and password are required.' }, 400);
 
     const sql  = getDb();
     const rows = await sql`
       SELECT id, name, email, password FROM "user" WHERE email = ${email} LIMIT 1
     `;
 
-    if (rows.length === 0) return res.status(401).json({ error: 'Invalid email or password' });
+    if (rows.length === 0) return json({ error: 'Invalid email or password' }, 401);
 
     const user  = rows[0];
     const valid = await verifyPassword(password, user.password as string);
-    if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
+    if (!valid) return json({ error: 'Invalid email or password' }, 401);
 
     const token = await createToken({
       sub:   user.id    as string,
@@ -30,10 +29,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       email: user.email as string,
     });
 
-    res.setHeader('Set-Cookie', authCookieHeader(token));
-    return res.status(200).json({ user: { id: user.id, name: user.name, email: user.email } });
+    return new Response(JSON.stringify({ user: { id: user.id, name: user.name, email: user.email } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', 'Set-Cookie': authCookieHeader(token) },
+    });
   } catch (err) {
     console.error('[sign-in]', err);
-    return res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    return json({ error: 'Something went wrong. Please try again.' }, 500);
   }
 }

@@ -1,22 +1,23 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getDb } from '../_helpers';
+import { getDb, json } from '../_helpers';
 import { hashPassword, createToken, authCookieHeader } from '../_auth-utils';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+export const config = { runtime: 'edge' };
+
+export default async function handler(req: Request): Promise<Response> {
+  if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
   try {
-    const body = req.body as { name?: string; email?: string; password?: string } | undefined;
-    const { name, email, password } = body ?? {};
+    const body = await req.json() as { name?: string; email?: string; password?: string };
+    const { name, email, password } = body;
 
     if (!name || !email || !password || password.length < 8) {
-      return res.status(400).json({ error: 'Invalid input — name, email, and a password of at least 8 characters are required.' });
+      return json({ error: 'Invalid input — name, email, and a password of at least 8 characters are required.' }, 400);
     }
 
     const sql = getDb();
 
     const existing = await sql`SELECT id FROM "user" WHERE email = ${email} LIMIT 1`;
-    if (existing.length > 0) return res.status(409).json({ error: 'Email already in use' });
+    if (existing.length > 0) return json({ error: 'Email already in use' }, 409);
 
     const hashed = await hashPassword(password);
     const id     = crypto.randomUUID();
@@ -28,10 +29,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const token = await createToken({ sub: id, name, email });
 
-    res.setHeader('Set-Cookie', authCookieHeader(token));
-    return res.status(201).json({ user: { id, name, email } });
+    return new Response(JSON.stringify({ user: { id, name, email } }), {
+      status: 201,
+      headers: { 'Content-Type': 'application/json', 'Set-Cookie': authCookieHeader(token) },
+    });
   } catch (err) {
     console.error('[sign-up]', err);
-    return res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    return json({ error: 'Something went wrong. Please try again.' }, 500);
   }
 }
