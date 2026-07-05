@@ -37,7 +37,7 @@ export default async function handler(req: Request): Promise<Response> {
            ON bu.benefit_id   = b.id
           AND bu.user_card_id = uc.id
     WHERE uc.user_id = ${userId}
-      AND b.frequency   IN ('monthly', 'annual')
+      AND b.frequency   IN ('monthly', 'annual', 'one-time', 'ongoing')
       AND b.benefit_type IN ('credit', 'perk')
     GROUP BY uc.id, c.name, c.network,
              b.id, b.title, b.description, b.category,

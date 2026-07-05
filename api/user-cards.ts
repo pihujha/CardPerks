@@ -19,6 +19,8 @@ export default async function handler(req: Request): Promise<Response> {
         c.bank,
         c.network,
         c.tier,
+        COALESCE(c.annual_fee, 0)   AS annual_fee,
+        COALESCE(c.fee_currency, 'USD') AS fee_currency,
         COALESCE(
           json_agg(
             json_build_object(
@@ -40,7 +42,7 @@ export default async function handler(req: Request): Promise<Response> {
       LEFT JOIN benefits b ON b.card_id = uc.card_id
       WHERE uc.user_id = ${userId}
       GROUP BY uc.id, uc.card_id, uc.nickname, uc.added_at,
-               c.name, c.bank, c.network, c.tier
+               c.name, c.bank, c.network, c.tier, c.annual_fee, c.fee_currency
       ORDER BY uc.added_at DESC
     `;
     return json(rows);
