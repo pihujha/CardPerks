@@ -111,15 +111,15 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900">
       <Nav />
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
 
         {/* Header */}
         <div className="flex items-baseline justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Benefits Hub</h1>
-            <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
+            <h1 className="text-2xl font-bold tracking-tight text-[#1c1a17] dark:text-gray-100" style={{ letterSpacing: '-0.03em' }}>Benefits Hub</h1>
+            <p className="text-sm text-[#8a857d] dark:text-gray-500 mt-0.5">
               {periodLabel(tab)}
               {!loading && totalCards > 0 && (
                 <span> · {totalCards} card{totalCards !== 1 ? 's' : ''}</span>
@@ -128,25 +128,25 @@ export default function Dashboard() {
           </div>
           {!loading && (
             <div className="text-right">
-              <p className={`text-2xl font-bold font-mono ${unclaimedCount > 0 ? 'text-rose-500' : 'text-gray-300 dark:text-gray-600'}`}>
+              <p className={`text-2xl font-bold font-mono ${unclaimedCount > 0 ? 'text-rose-500' : 'text-[#d5d1ca] dark:text-gray-600'}`}>
                 {unclaimedCount}
               </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">unclaimed</p>
+              <p className="text-xs text-[#b3ada3] dark:text-gray-500 uppercase tracking-wide">unclaimed</p>
             </div>
           )}
         </div>
 
-        {/* Tab bar — scrollable on mobile */}
+        {/* Tab bar */}
         <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 mb-8">
-          <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 w-fit min-w-full sm:min-w-0">
+          <div className="flex gap-1 bg-[#f0eee9] dark:bg-gray-800 rounded-xl p-1 w-fit min-w-full sm:min-w-0">
             {(['month', 'year', 'onetime', 'ongoing'] as Tab[]).map(t => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
+                className={`px-3 sm:px-4 py-2 rounded-[9px] text-sm font-medium transition-colors whitespace-nowrap ${
                   tab === t
-                    ? 'bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                    ? 'bg-white dark:bg-gray-700 shadow-sm text-[#1c1a17] dark:text-white'
+                    : 'text-[#8a857d] dark:text-gray-400 hover:text-[#1c1a17] dark:hover:text-gray-200'
                 }`}
               >
                 {t === 'month' ? 'This Month' : t === 'year' ? 'This Year' : t === 'onetime' ? 'One-time' : 'Always On'}
@@ -157,23 +157,23 @@ export default function Dashboard() {
 
         {/* Content */}
         {loading ? (
-          <p className="text-gray-400 dark:text-gray-500 text-sm">Loading…</p>
+          <p className="text-[#8a857d] dark:text-gray-500 text-sm">Loading…</p>
         ) : groups.length === 0 ? (
-          <p className="text-gray-400 dark:text-gray-500 text-sm">
+          <p className="text-[#8a857d] dark:text-gray-500 text-sm">
             {tab === 'onetime' ? 'No one-time benefits found.'
               : tab === 'ongoing' ? 'No always-on benefits found.'
               : `No ${tab === 'month' ? 'monthly' : 'annual'} benefits found.`}{' '}
-            <a href="/cards" className="text-amber-600 hover:underline">Add a card</a> to get started.
+            <a href="/cards" className="text-[#b45309] hover:underline">Add a card</a> to get started.
           </p>
         ) : (
           <div className="space-y-5">
             {tab === 'onetime' && (
-              <p className="text-xs text-gray-400 dark:text-gray-500 -mt-3 mb-2">
+              <p className="text-xs text-[#b3ada3] dark:text-gray-500 -mt-3 mb-2">
                 These benefits don't reset on a schedule — mark them once when you've used them.
               </p>
             )}
             {tab === 'ongoing' && (
-              <p className="text-xs text-gray-400 dark:text-gray-500 -mt-3 mb-2">
+              <p className="text-xs text-[#b3ada3] dark:text-gray-500 -mt-3 mb-2">
                 These apply automatically on qualifying transactions — no action needed.
               </p>
             )}
@@ -186,31 +186,32 @@ export default function Dashboard() {
               return (
                 <div
                   key={group.card_name + group.benefits[0]?.user_card_id}
-                  className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden"
+                  className="bg-white dark:bg-gray-800 rounded-[18px] border border-[#eceae6] dark:border-gray-700 overflow-hidden"
+                  style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03), 0 12px 32px -24px rgba(28,26,23,0.10)' }}
                 >
-                  <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-50 dark:border-gray-800">
+                  <div className="flex items-center gap-3 px-5 py-4 border-b border-[#f4f2ee] dark:border-gray-700">
                     <div className="w-1 h-7 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-                    <span className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{group.card_name}</span>
-                    <span className={`ml-auto text-xs font-medium px-2 py-0.5 rounded-full ${
+                    <span className="font-semibold text-[#1c1a17] dark:text-gray-200 text-sm">{group.card_name}</span>
+                    <span className={`ml-auto text-xs font-medium px-2.5 py-1 rounded-full ${
                       allDone
-                        ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
-                        : 'bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500'
+                        ? 'bg-[#e8f6ef] dark:bg-green-900/20 text-[#059669] dark:text-green-400'
+                        : 'bg-[#f4f2ee] dark:bg-gray-700 text-[#8a857d] dark:text-gray-400'
                     }`}>
                       {claimed}/{total} claimed
                     </span>
                   </div>
 
-                  <ul className="divide-y divide-gray-50 dark:divide-gray-800">
+                  <ul className="divide-y divide-[#f8f7f4] dark:divide-gray-700">
                     {group.benefits.map(row => {
                       const used = isUsed(row);
                       return (
                         <li key={row.benefit_id} className="flex items-center gap-4 px-5 py-3.5">
                           <button
                             onClick={() => toggle(row)}
-                            className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                            className={`w-[22px] h-[22px] rounded-[7px] border-2 flex items-center justify-center flex-shrink-0 transition-all ${
                               used
-                                ? 'bg-amber-500 border-amber-500'
-                                : 'border-gray-300 dark:border-gray-600 hover:border-amber-400'
+                                ? 'bg-[#f59e0b] border-[#f59e0b]'
+                                : 'border-[#d5d1ca] dark:border-gray-600 hover:border-[#f59e0b]'
                             }`}
                           >
                             {used && (
@@ -221,18 +222,18 @@ export default function Dashboard() {
                           </button>
 
                           <div className="flex-1 min-w-0">
-                            <p className={`text-sm font-medium ${used ? 'line-through text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-200'}`}>
+                            <p className={`text-sm font-medium ${used ? 'line-through text-[#b3ada3] dark:text-gray-600' : 'text-[#1c1a17] dark:text-gray-200'}`}>
                               {row.title}
                             </p>
                             {row.description && (
-                              <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">{row.description}</p>
+                              <p className="text-xs text-[#b3ada3] dark:text-gray-500 truncate mt-0.5">{row.description}</p>
                             )}
                           </div>
 
                           <div className="flex items-center gap-2 flex-shrink-0">
-                            <span className={`text-sm font-semibold font-mono ${used ? 'text-gray-300 dark:text-gray-700' : 'text-gray-700 dark:text-gray-300'}`}>
+                            <span className={`text-sm font-semibold font-mono ${used ? 'text-[#d5d1ca] dark:text-gray-700' : 'text-[#1c1a17] dark:text-gray-200'}`}>
                               {Number(row.value_usd) === 0
-                                ? 'N/A'
+                                ? '—'
                                 : `${currencySymbol(row.currency)}${Number(row.value_usd).toLocaleString()}`}
                             </span>
                             {row.proof_url && !used && (
@@ -240,7 +241,7 @@ export default function Dashboard() {
                                 href={row.proof_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-gray-300 dark:text-gray-600 hover:text-amber-500 transition-colors"
+                                className="text-[#d5d1ca] dark:text-gray-600 hover:text-[#b45309] transition-colors"
                                 title="View on bank website"
                                 onClick={e => e.stopPropagation()}
                               >

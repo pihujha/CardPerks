@@ -4,7 +4,6 @@ import Landing    from './pages/Landing';
 import Dashboard  from './pages/Dashboard';
 import Cards      from './pages/Cards';
 import Insights   from './pages/Insights';
-import Import     from './pages/Import';
 import SignInPage from './pages/SignIn';
 import SignUpPage from './pages/SignUp';
 
@@ -29,7 +28,6 @@ export default function App() {
       <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
       <Route path="/cards"     element={<RequireAuth><Cards /></RequireAuth>} />
       <Route path="/insights"  element={<RequireAuth><Insights /></RequireAuth>} />
-      <Route path="/import"    element={<RequireAuth><Import /></RequireAuth>} />
     </Routes>
   );
 }

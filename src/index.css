@@ -2,17 +2,22 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-visa:       #1a1f71;
-  --color-mastercard: #eb001b;
-  --color-amex:       #007b5e;
-  --color-discover:   #f76f20;
-  --color-diners:     #004b87;
-  --color-rupay:      #1e3a8a;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Instrument Sans', -apple-system, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Instrument Sans', -apple-system, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  background: #fbfaf8;
+  color: #1c1a17;
 }
+
+:where(.dark) body {
+  background: #111827;
+  color: #f9fafb;
+}
+
+@keyframes floatA { 0%, 100% { margin-top: 0; } 50% { margin-top: -14px; } }
+@keyframes floatB { 0%, 100% { margin-top: 0; } 50% { margin-top:  10px; } }
+@keyframes floatC { 0%, 100% { margin-top: 0; } 50% { margin-top:  -8px; } }

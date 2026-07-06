@@ -73,27 +73,27 @@ export default function Cards() {
   , 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900">
       <Nav />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
         {/* header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">My Cards</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-[#1c1a17] dark:text-gray-100" style={{ letterSpacing: '-0.03em' }}>My Cards</h1>
             {userCards.length > 0 && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+              <p className="text-sm text-[#8a857d] dark:text-gray-400 mt-0.5">
                 {userCards.length} card{userCards.length !== 1 ? 's' : ''} ·{' '}
-                <span className="text-green-600 dark:text-green-400 font-medium font-mono">
+                <span className="text-[#059669] dark:text-green-400 font-medium font-mono">
                   ${totalAnnualValue.toLocaleString()}
                 </span>
-                <span className="text-gray-400 dark:text-gray-500"> in annual credits</span>
+                <span className="text-[#b3ada3] dark:text-gray-500"> in annual credits</span>
               </p>
             )}
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-amber-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-amber-600 transition-colors"
+            className="bg-[#1c1a17] dark:bg-gray-100 text-[#fbfaf8] dark:text-gray-900 px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             + Add Card
           </button>
@@ -103,11 +103,11 @@ export default function Cards() {
         {!loading && userCards.length === 0 && (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">💳</div>
-            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">No cards yet</h2>
-            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Add your first card to start tracking benefits.</p>
+            <h2 className="text-lg font-semibold text-[#4a463f] dark:text-gray-300">No cards yet</h2>
+            <p className="text-sm text-[#8a857d] dark:text-gray-500 mt-1">Add your first card to start tracking benefits.</p>
             <button
               onClick={() => setShowModal(true)}
-              className="mt-4 bg-amber-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-amber-600 transition-colors"
+              className="mt-4 bg-[#1c1a17] dark:bg-gray-100 text-[#fbfaf8] dark:text-gray-900 px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               + Add Card
             </button>
@@ -118,7 +118,7 @@ export default function Cards() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1,2,3].map(i => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl h-36 animate-pulse border border-gray-100 dark:border-gray-700" />
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-[20px] h-36 animate-pulse border border-[#eceae6] dark:border-gray-700" />
             ))}
           </div>
         ) : (
@@ -133,53 +133,55 @@ export default function Cards() {
                 <div
                   key={uc.id}
                   onClick={() => setSelectedCard(uc)}
-                  className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 cursor-pointer hover:shadow-md transition-shadow relative group"
-                  style={{ borderLeft: `4px solid ${color}` }}
+                  className="bg-white dark:bg-gray-800 rounded-[20px] border border-[#eceae6] dark:border-gray-700 p-5 cursor-pointer transition-all hover:-translate-y-0.5 relative group"
+                  style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03)' }}
+                  onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 20px 40px -20px rgba(28,26,23,0.18)')}
+                  onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 1px 2px rgba(28,26,23,0.03)')}
                 >
                   <button
                     onClick={e => { e.stopPropagation(); handleRemove(uc.id); }}
-                    className="absolute top-3 right-3 text-gray-300 dark:text-gray-600 hover:text-red-400 dark:hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-lg leading-none"
+                    className="absolute top-3 right-3 text-[#d5d1ca] dark:text-gray-600 hover:text-red-400 dark:hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-lg leading-none"
                     title="Remove card"
                   >
                     ×
                   </button>
 
-                  <p className="font-bold text-gray-900 dark:text-white pr-6 leading-snug">{uc.nickname ?? uc.name}</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{uc.bank}</p>
+                  <div className="flex items-start gap-3">
+                    <span className="w-1 h-10 rounded-full flex-shrink-0 mt-0.5" style={{ backgroundColor: color }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-[#1c1a17] dark:text-gray-100 pr-6 leading-snug">{uc.nickname ?? uc.name}</p>
+                      <p className="text-xs text-[#8a857d] dark:text-gray-500 mt-0.5">{uc.bank}</p>
+                    </div>
+                  </div>
 
                   <div className="flex items-center gap-2 mt-3">
-                    <span className="text-xs text-gray-400 dark:text-gray-500">{TIER_LABEL[uc.tier]}</span>
-                    <span className="text-gray-200 dark:text-gray-700">·</span>
+                    <span className="text-xs text-[#8a857d] dark:text-gray-500">{TIER_LABEL[uc.tier]}</span>
+                    <span className="w-1 h-1 rounded-full bg-[#d5d1ca] dark:bg-gray-600" />
                     <span
-                      className="text-xs font-semibold px-1.5 py-0.5 rounded text-white"
+                      className="text-xs font-semibold px-2 py-0.5 rounded-full text-white"
                       style={{ backgroundColor: color }}
                     >
                       {uc.network}
                     </span>
                   </div>
 
-                  <div className="mt-3 space-y-0.5">
-                    {annualValue > 0 && (
-                      <p className="text-xs text-green-600 dark:text-green-400 font-medium">
-                        <span className="font-mono">
-                          {uc.fee_currency === 'INR' ? '₹' : '$'}{annualValue.toLocaleString()}
-                        </span>
-                        {' '}in annual credits
+                  <div className="flex items-baseline gap-5 mt-4 pt-4 border-t border-[#f4f2ee] dark:border-gray-700">
+                    <div>
+                      <p className="font-semibold font-mono text-[#059669] dark:text-green-400">
+                        {uc.fee_currency === 'INR' ? '₹' : '$'}{annualValue.toLocaleString()}
                       </p>
-                    )}
-                    {Number(uc.annual_fee) > 0 && (
-                      <p className="text-xs text-gray-400 dark:text-gray-500">
-                        <span className="font-mono">
-                          {uc.fee_currency === 'INR' ? '₹' : '$'}{Number(uc.annual_fee).toLocaleString()}
-                        </span>
-                        {' '}annual fee
+                      <p className="text-[11px] text-[#b3ada3] dark:text-gray-500 mt-0.5">annual credits</p>
+                    </div>
+                    <div>
+                      <p className="font-semibold font-mono text-[#b3ada3] dark:text-gray-400">
+                        {Number(uc.annual_fee) === 0
+                          ? 'Free'
+                          : `${uc.fee_currency === 'INR' ? '₹' : '$'}${Number(uc.annual_fee).toLocaleString()}`}
                       </p>
-                    )}
-                    {Number(uc.annual_fee) === 0 && (
-                      <p className="text-xs text-gray-400 dark:text-gray-500">No annual fee</p>
-                    )}
+                      <p className="text-[11px] text-[#b3ada3] dark:text-gray-500 mt-0.5">annual fee</p>
+                    </div>
                   </div>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                  <p className="text-xs text-[#b3ada3] dark:text-gray-600 mt-2">
                     {uc.benefits.length} benefit{uc.benefits.length !== 1 ? 's' : ''}
                   </p>
                 </div>

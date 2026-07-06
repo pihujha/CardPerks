@@ -4,9 +4,8 @@ import { useSession, signOut, useSetSession } from '../lib/auth';
 
 const links = [
   { to: '/dashboard', label: 'Dashboard' },
-  { to: '/cards',     label: 'My Cards' },
-  { to: '/insights',  label: 'Insights' },
-  { to: '/import',    label: 'AI Import' },
+  { to: '/cards',     label: 'My Cards'  },
+  { to: '/insights',  label: 'Insights'  },
 ];
 
 function useDarkMode() {
@@ -51,9 +50,12 @@ export default function Nav() {
 
   return (
     <>
-      <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-4 sm:px-6 py-3 sticky top-0 z-50">
-        <div className="flex items-center justify-between">
-          <NavLink to="/" className="font-extrabold text-lg text-gray-900 dark:text-white tracking-tight">
+      <nav
+        className="sticky top-0 z-50 px-4 sm:px-6"
+        style={{ background: 'rgba(251,250,248,0.82)', backdropFilter: 'blur(20px) saturate(1.4)', WebkitBackdropFilter: 'blur(20px) saturate(1.4)', borderBottom: '1px solid rgba(28,26,23,0.07)' } as React.CSSProperties}
+      >
+        <div className="flex items-center justify-between h-[58px]">
+          <NavLink to="/" className="font-bold text-[17px] tracking-[-0.02em] text-[#1c1a17] dark:text-gray-100 no-underline">
             CardPerks
           </NavLink>
 
@@ -64,10 +66,10 @@ export default function Nav() {
                 {links.map(({ to, label }) => (
                   <NavLink key={to} to={to}
                     className={({ isActive }) =>
-                      `text-sm font-medium transition-colors ${
+                      `text-sm transition-colors no-underline ${
                         isActive
-                          ? 'text-amber-600'
-                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+                          ? 'font-semibold text-[#1c1a17] dark:text-gray-100'
+                          : 'font-medium text-[#8a857d] dark:text-gray-400 hover:text-[#1c1a17] dark:hover:text-gray-100'
                       }`
                     }
                   >
@@ -75,26 +77,32 @@ export default function Nav() {
                   </NavLink>
                 ))}
 
+                {/* AI Import — coming soon */}
+                <span className="flex items-center gap-1.5 text-sm font-medium text-[#b3ada3]">
+                  AI Import
+                  <span className="text-[10px] font-semibold tracking-[0.06em] uppercase text-[#b45309] bg-[#fdf3e3] px-1.5 py-0.5 rounded-full">Soon</span>
+                </span>
+
                 {/* User dropdown */}
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(o => !o)}
-                    className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    className="flex items-center gap-1.5 text-sm font-medium text-[#4a463f] dark:text-gray-300 hover:text-[#1c1a17] dark:hover:text-white transition-colors"
                   >
-                    <span className="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    <span className="w-[30px] h-[30px] rounded-full bg-[#fdf3e3] text-[#b45309] flex items-center justify-center text-[13px] font-bold flex-shrink-0">
                       {firstName[0].toUpperCase()}
                     </span>
                     {firstName}
-                    <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 12 12">
+                    <svg className={`w-3.5 h-3.5 text-[#b3ada3] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 12 12">
                       <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
 
                   {dropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1.5 z-50">
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-[#eceae6] dark:border-gray-700 py-1.5 z-50">
                       <button
                         onClick={() => { setSettingsOpen(true); setDropdownOpen(false); }}
-                        className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/60 transition-colors text-left"
+                        className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-[#4a463f] dark:text-gray-300 hover:bg-[#f8f7f4] dark:hover:bg-gray-700/60 transition-colors text-left"
                       >
                         <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 16 16">
                           <circle cx="8" cy="8" r="2.2" stroke="currentColor" strokeWidth="1.4"/>
@@ -105,14 +113,14 @@ export default function Nav() {
                       <a
                         href="mailto:pijha@calpoly.edu?subject=CardPerks%20Bug%20Report"
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/60 transition-colors"
+                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#4a463f] dark:text-gray-300 hover:bg-[#f8f7f4] dark:hover:bg-gray-700/60 transition-colors"
                       >
                         <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 16 16">
                           <path d="M8 2a6 6 0 100 12A6 6 0 008 2zm0 3.5V9M8 11.5v.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
                         </svg>
                         Report a Bug
                       </a>
-                      <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
+                      <div className="border-t border-[#f0eee9] dark:border-gray-700 my-1" />
                       <button
                         onClick={() => { setDropdownOpen(false); handleSignOut(); }}
                         className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left"
@@ -129,7 +137,7 @@ export default function Nav() {
 
               {/* Mobile hamburger */}
               <button
-                className="sm:hidden p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="sm:hidden p-1.5 rounded-lg text-[#8a857d] hover:bg-[#f4f2ee] dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setMobileOpen(o => !o)}
                 aria-label="Toggle menu"
               >
@@ -149,7 +157,7 @@ export default function Nav() {
 
         {/* Mobile menu */}
         {session && mobileOpen && (
-          <div className="sm:hidden border-t border-gray-100 dark:border-gray-800 mt-3 pt-3 pb-1 space-y-0.5">
+          <div className="sm:hidden border-t border-[#f0eee9] dark:border-gray-800 mt-0 pt-3 pb-2 space-y-0.5">
             {links.map(({ to, label }) => (
               <NavLink
                 key={to} to={to}
@@ -157,30 +165,34 @@ export default function Nav() {
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? 'text-amber-600 bg-amber-50 dark:bg-amber-900/20'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      ? 'text-[#1c1a17] dark:text-gray-100 bg-[#f4f2ee] dark:bg-gray-800'
+                      : 'text-[#6f6a62] dark:text-gray-400 hover:bg-[#f8f7f4] dark:hover:bg-gray-800'
                   }`
                 }
               >
                 {label}
               </NavLink>
             ))}
-            <div className="border-t border-gray-100 dark:border-gray-800 mt-2 pt-2 space-y-0.5">
-              <div className="flex items-center gap-2 px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xs font-bold">
+            <span className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#b3ada3]">
+              AI Import
+              <span className="text-[10px] font-semibold tracking-[0.06em] uppercase text-[#b45309] bg-[#fdf3e3] px-1.5 py-0.5 rounded-full">Soon</span>
+            </span>
+            <div className="border-t border-[#f0eee9] dark:border-gray-800 mt-2 pt-2 space-y-0.5">
+              <div className="flex items-center gap-2 px-3 py-2 text-sm text-[#8a857d]">
+                <span className="w-5 h-5 rounded-full bg-[#fdf3e3] text-[#b45309] flex items-center justify-center text-xs font-bold">
                   {firstName[0].toUpperCase()}
                 </span>
-                <span className="font-medium">{session.user.name}</span>
+                <span className="font-medium text-[#4a463f] dark:text-gray-300">{session.user.name}</span>
               </div>
               <button
                 onClick={() => { setSettingsOpen(true); setMobileOpen(false); }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#6f6a62] dark:text-gray-400 hover:bg-[#f8f7f4] dark:hover:bg-gray-800 transition-colors"
               >
                 Settings
               </button>
               <a
                 href="mailto:pijha@calpoly.edu?subject=CardPerks%20Bug%20Report"
-                className="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="block px-3 py-2 rounded-lg text-sm font-medium text-[#6f6a62] dark:text-gray-400 hover:bg-[#f8f7f4] dark:hover:bg-gray-800 transition-colors"
               >
                 Report a Bug
               </a>
@@ -198,7 +210,8 @@ export default function Nav() {
       {/* Settings modal */}
       {settingsOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(28,26,23,0.24)', backdropFilter: 'blur(2px)' } as React.CSSProperties}
           onClick={() => setSettingsOpen(false)}
         >
           <div
@@ -206,25 +219,25 @@ export default function Nav() {
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-5">
-              <h2 className="font-bold text-gray-900 dark:text-white text-lg">Settings</h2>
+              <h2 className="font-bold text-[#1c1a17] dark:text-white text-lg">Settings</h2>
               <button
                 onClick={() => setSettingsOpen(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="text-[#b3ada3] hover:text-[#6f6a62] dark:hover:text-gray-300 text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f4f2ee] dark:hover:bg-gray-700 transition-colors"
               >
                 ×
               </button>
             </div>
 
-            <div className="flex items-center justify-between py-4 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between py-4 border-t border-[#f0eee9] dark:border-gray-700">
               <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-gray-200">Dark mode</p>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Switch to a darker color scheme</p>
+                <p className="text-sm font-medium text-[#1c1a17] dark:text-gray-200">Dark mode</p>
+                <p className="text-xs text-[#8a857d] dark:text-gray-500 mt-0.5">Switch to a darker color scheme</p>
               </div>
               <button
                 onClick={toggleDark}
                 role="switch"
                 aria-checked={dark}
-                className={`relative flex-shrink-0 w-11 h-6 rounded-full transition-colors focus:outline-none ${dark ? 'bg-amber-500' : 'bg-gray-200 dark:bg-gray-600'}`}
+                className={`relative flex-shrink-0 w-11 h-6 rounded-full transition-colors focus:outline-none ${dark ? 'bg-[#b45309]' : 'bg-[#e5e1da] dark:bg-gray-600'}`}
               >
                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${dark ? 'translate-x-5' : 'translate-x-0'}`} />
               </button>
