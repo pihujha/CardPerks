@@ -125,9 +125,10 @@ def chunk_pdf_text(text: str) -> list[str]:
             i += 1
             continue
         if re.search(r"card purchase", line, re.I) and "$" not in line:
-            # Multi-line entry — grab trigger + next 2 lines
-            block = "\n".join(l for l in lines[i : i + 3] if l)
-            chunks.append(block)
+            # Multi-line entry — skip trigger line, send desc + amount (matches training format)
+            block = "\n".join(l for l in lines[i + 1 : i + 3] if l)
+            if block:
+                chunks.append(block)
             i += 3
         else:
             chunks.append(line)

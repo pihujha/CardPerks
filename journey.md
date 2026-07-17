@@ -349,9 +349,9 @@ Without this proxy, the frontend (5173) would hit CORS errors calling API routes
 
 ---
 
-## 11. What's Being Built Now — Parser LoRA
+## 11. The Parser LoRA — Completed
 
-The regex PDF parser is fundamentally fragile — every bank formats their statement differently. The fix is to train a second LoRA adapter on the same Qwen2.5-1.5B base that does structured extraction from raw statement text.
+The regex PDF parser was fundamentally fragile — every bank formats their statement differently. We trained a second LoRA adapter on the same Qwen2.5-1.5B base that does structured extraction from raw statement text.
 
 ### Architecture
 ```
@@ -362,10 +362,18 @@ PDF text (raw)
 [{ description, amount, category }]
 ```
 
-Both tasks use the same base model. In production, the inference server loads both LoRA adapters and switches between them per request using PEFT's multi-adapter support.
+Both tasks use the same base model. The inference server loads both LoRA adapters at startup — one base model instance per adapter (PEFT multi-adapter stacking is tricky on MPS, so two separate instances).
 
-### Training Data
-Generated synthetic bank statement entries in 4 major formats (student debit multi-line, Chase single-line, Apple Card, Bank of America) across all merchant categories, plus negative examples (Zelle payments, balance lines, headers → SKIP).
+### Training Data (`generate_parse_data.py`)
+~770 training rows across 4 real-world bank statement formats:
+1. **Multi-line student debit** — `MM/DD Merchant Name Card XXXX\n$XX.XX$X,XXX.XX`
+2. **Chase-style** — `MM/DD MERCHANT NAME 800-XXX-XXXX CA  XX.XX`
+3. **Apple Card** — `Merchant Name  MM/DD/YYYY  $XX.XX`
+4. **Single-line** — `MM/DD Merchant $XX.XX $X,XXX.XX`
+
+Plus ~170 negative examples (Zelle payments, balance lines, headers, trigger-only lines) that all output `SKIP`.
+
+80/20 train/test split → `data/parse_train.csv`, `data/parse_test.csv`.
 
 ### Prompt Template
 ```
@@ -374,10 +382,20 @@ Entry: {text}
 Result:
 ```
 
-### Why This Is Better
-- Zero regex brittle edge cases
-- Works on any bank's PDF format after seeing enough training examples
-- Same hardware, same model, marginal extra cost
+### Colab Training Bugs Hit
+| Bug | Cause | Fix |
+|---|---|---|
+| `ValueError: bf16/gpu not supported` | T4 is Turing architecture — bf16 needs Ampere+ | Changed `bf16=True` → `fp16=True`, `bfloat16` → `float16` |
+| `warmup_ratio is deprecated` | transformers v5 removed it | Changed to `warmup_steps=50` |
+| `huggingface-hub 0.36.2 incompatible` | Pinning `transformers==4.47.0` pulled in old hub version conflicting with Colab's gradio | Removed version pins, used `-U` to upgrade to latest |
+| Training ran 26 min with no progress | Runtime silently lost T4, fell back to CPU | Runtime → Change runtime type → T4 GPU, restarted |
+| Parser returned empty transactions | Chunking sent 3-line block (trigger + desc + amount) but model trained on 2-line format (desc + amount only) | Fixed `chunk_pdf_text` to skip the "Card Purchase" trigger line |
+
+### Result
+- Training: ~20 minutes on T4, fp16
+- `/parse` endpoint correctly extracts `{"description": "Trader Joe's", "amount": 33.89}` from multi-line PDF text
+- `api/parse-pdf.ts` now calls `/parse` first (LLM), falls back to regex if server is offline
+- PDF parsing is now format-agnostic — no more regex brittle edge cases
 
 ---
 
@@ -395,7 +413,7 @@ Result:
 | Cards hardcoded | 10 |
 | API routes | 12 |
 | DB tables | 6 |
-| Bugs fixed | 14 |
+| Bugs fixed | 19 |
 
 ---
 
