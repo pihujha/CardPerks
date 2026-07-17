@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Nav from '../components/Nav';
+import ParallaxBackground from '../components/ParallaxBackground';
 import { apiFetch } from '../lib/api';
 import { NETWORK_COLORS } from '../lib/networks';
 
@@ -123,7 +124,7 @@ export default function Insights() {
 
     return (
       <div className="bg-white dark:bg-gray-800 rounded-[16px] border border-[#eceae6] dark:border-gray-700 overflow-hidden"
-        style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03)' }}>
+        style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03)', animation: 'slideUp 0.45s cubic-bezier(0.2,0.6,0.2,1) both', animationDelay: `${idx * 70}ms` }}>
         <button
           onClick={() => toggleExpand(expandKey)}
           className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-[#fbfaf8] dark:hover:bg-gray-700/50 transition-colors"
@@ -176,9 +177,10 @@ export default function Insights() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900">
+    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900" style={{ background: 'radial-gradient(ellipse 600px 500px at 100% 0%, rgba(124,58,237,0.04) 0%, transparent 55%), radial-gradient(ellipse 700px 600px at 0% 100%, rgba(180,83,9,0.05) 0%, transparent 55%), #fbfaf8' }}>
+      <ParallaxBackground />
       <Nav />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10 relative" style={{ zIndex: 1 }}>
         <div className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight text-[#1c1a17] dark:text-gray-100" style={{ letterSpacing: '-0.03em' }}>Insights</h1>
           <p className="text-sm text-[#8a857d] dark:text-gray-500 mt-0.5">Your cards ranked by annual benefit value per category</p>

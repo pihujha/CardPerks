@@ -21,3 +21,8 @@ body {
 @keyframes floatA { 0%, 100% { margin-top: 0; } 50% { margin-top: -14px; } }
 @keyframes floatB { 0%, 100% { margin-top: 0; } 50% { margin-top:  10px; } }
 @keyframes floatC { 0%, 100% { margin-top: 0; } 50% { margin-top:  -8px; } }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}

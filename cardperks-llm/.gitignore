@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# trained adapter weights (large binary files — download from Colab instead)
+qwen-cardperks-lora/
+qwen-cardperks-parser/
+
+# generated training CSVs (re-run generate_*.py to recreate)
+data/

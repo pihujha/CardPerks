@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Nav from '../components/Nav';
+import ParallaxBackground from '../components/ParallaxBackground';
 import BenefitsDrawer from '../components/BenefitsDrawer';
 import AddCardModal   from '../components/AddCardModal';
 import { apiFetch }  from '../lib/api';
@@ -73,10 +74,11 @@ export default function Cards() {
   , 0);
 
   return (
-    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900">
+    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900" style={{ background: 'radial-gradient(ellipse 600px 500px at 100% 0%, rgba(180,83,9,0.05) 0%, transparent 55%), radial-gradient(ellipse 700px 600px at 0% 100%, rgba(37,99,235,0.04) 0%, transparent 55%), #fbfaf8' }}>
+      <ParallaxBackground />
       <Nav />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 relative" style={{ zIndex: 1 }}>
         {/* header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -123,7 +125,7 @@ export default function Cards() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {userCards.map(uc => {
+            {userCards.map((uc, ci) => {
               const annualValue = uc.benefits
                 .filter(b => b.benefit_type === 'credit' && b.value_usd > 0)
                 .reduce((s, b) => s + Number(b.value_usd), 0);
@@ -134,7 +136,7 @@ export default function Cards() {
                   key={uc.id}
                   onClick={() => setSelectedCard(uc)}
                   className="bg-white dark:bg-gray-800 rounded-[20px] border border-[#eceae6] dark:border-gray-700 p-5 cursor-pointer transition-all hover:-translate-y-0.5 relative group"
-                  style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03)' }}
+                  style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03)', animation: 'slideUp 0.5s cubic-bezier(0.2,0.6,0.2,1) both', animationDelay: `${ci * 60}ms` }}
                   onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 20px 40px -20px rgba(28,26,23,0.18)')}
                   onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 1px 2px rgba(28,26,23,0.03)')}
                 >

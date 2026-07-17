@@ -6,6 +6,7 @@ const links = [
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/cards',     label: 'My Cards'  },
   { to: '/insights',  label: 'Insights'  },
+  { to: '/analysis',  label: 'Analysis'  },
 ];
 
 function useDarkMode() {
@@ -50,6 +51,9 @@ export default function Nav() {
 
   return (
     <>
+      {/* Top accent bar */}
+      <div className="fixed top-0 left-0 right-0 h-px z-[101] pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(180,83,9,0.35) 25%, rgba(180,83,9,0.5) 50%, rgba(180,83,9,0.35) 75%, transparent 100%)' }} />
+
       <nav
         className="sticky top-0 z-50 px-4 sm:px-6"
         style={{ background: 'rgba(251,250,248,0.82)', backdropFilter: 'blur(20px) saturate(1.4)', WebkitBackdropFilter: 'blur(20px) saturate(1.4)', borderBottom: '1px solid rgba(28,26,23,0.07)' } as React.CSSProperties}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Nav from '../components/Nav';
+import ParallaxBackground from '../components/ParallaxBackground';
 import { apiFetch } from '../lib/api';
 import { NETWORK_COLORS } from '../lib/networks';
 
@@ -111,9 +112,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900">
+    <div className="min-h-screen bg-[#fbfaf8] dark:bg-gray-900" style={{ background: 'radial-gradient(ellipse 700px 500px at 100% 0%, rgba(180,83,9,0.05) 0%, transparent 55%), radial-gradient(ellipse 500px 700px at 0% 100%, rgba(5,150,105,0.04) 0%, transparent 55%), #fbfaf8' }}>
+      <ParallaxBackground />
       <Nav />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10 relative" style={{ zIndex: 1 }}>
 
         {/* Header */}
         <div className="flex items-baseline justify-between mb-6">
@@ -177,7 +179,7 @@ export default function Dashboard() {
                 These apply automatically on qualifying transactions — no action needed.
               </p>
             )}
-            {groups.map(group => {
+            {groups.map((group, gi) => {
               const color   = NETWORK_COLORS[group.card_network] ?? '#6b7280';
               const claimed = group.benefits.filter(r => isUsed(r)).length;
               const total   = group.benefits.length;
@@ -187,7 +189,7 @@ export default function Dashboard() {
                 <div
                   key={group.card_name + group.benefits[0]?.user_card_id}
                   className="bg-white dark:bg-gray-800 rounded-[18px] border border-[#eceae6] dark:border-gray-700 overflow-hidden"
-                  style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03), 0 12px 32px -24px rgba(28,26,23,0.10)' }}
+                  style={{ boxShadow: '0 1px 2px rgba(28,26,23,0.03), 0 12px 32px -24px rgba(28,26,23,0.10)', animation: 'slideUp 0.5s cubic-bezier(0.2,0.6,0.2,1) both', animationDelay: `${gi * 80}ms` }}
                 >
                   <div className="flex items-center gap-3 px-5 py-4 border-b border-[#f4f2ee] dark:border-gray-700">
                     <div className="w-1 h-7 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
